@@ -21,12 +21,10 @@ describe('AuthService', () => {
   it('should create a user', async () => {
     const user = await service.createUser({
       name: 'test',
-      email: 'test@example.com',
+      email: 'test2@example.com',
       password: 'password',
     });
     expect(user).toHaveProperty('id');
     expect(user).toHaveProperty('name', 'test');
-    // expect(user).toHaveProperty('email', '');
-    // expect(user).toHaveProperty('password');
   });
 });
