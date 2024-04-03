@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Post, Body, Session, HttpException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from './CreateUserDto';
 
@@ -11,10 +11,26 @@ export class AuthController {
     return await this.authService.createUser(body);
   }
 
-  @Get('hoge')
-  getHoge(): object {
-    return {
-      message: 'Hoge!',
-    };
+  @Post('signin')
+  async signin(
+    @Body() body: { email: string; password: string },
+    @Session()
+    session: {
+      userId: number;
+    },
+  ) {
+    const { email, password } = body;
+    const user = await this.authService.validateUser(email, password);
+
+    if (!user) {
+      throw new HttpException(
+        'メールアドレスかパスワードが間違っています。',
+        401,
+      );
+    }
+
+    session.userId = user.id;
+
+    return user;
   }
 }
