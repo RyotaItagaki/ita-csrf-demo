@@ -1,36 +1,32 @@
-import { Controller, Post, Body, Session, HttpException } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { CreateUserDto } from './CreateUserDto';
+import { Controller, UseGuards, Post, Req, Res } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Request, Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
-
-  @Post('signup')
-  async signup(@Body() body: CreateUserDto) {
-    return await this.authService.createUser(body);
-  }
-
+  @UseGuards(AuthGuard('local'))
   @Post('signin')
   async signin(
-    @Body() body: { email: string; password: string },
-    @Session()
-    session: {
-      userId: number;
-    },
+    @Req()
+    req: Request,
+    @Res()
+    res: Response,
   ) {
-    const { email, password } = body;
-    const user = await this.authService.validateUser(email, password);
+    const user = req.user as {
+      id: string;
+      name: string;
+      email: string;
+    };
 
-    if (!user) {
-      throw new HttpException(
-        'メールアドレスかパスワードが間違っています。',
-        401,
-      );
-    }
+    res.cookie('userId', user.id, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      // 有効期限: 24時間
+      maxAge: 24 * 60 * 60 * 1000,
+      path: '/',
+    });
 
-    session.userId = user.id;
-
-    return user;
+    res.json(req.user);
   }
 }

@@ -27,12 +27,20 @@ export class AuthService {
       },
     });
     if (!user) {
+      console.log('no user');
+
       return null;
     }
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
+      console.log('invalid password');
+
       return null;
     }
-    return user;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password: _, ...result } = user;
+    console.log('user found');
+
+    return result;
   }
 }

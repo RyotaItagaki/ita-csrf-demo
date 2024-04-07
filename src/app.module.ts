@@ -4,9 +4,10 @@ import { AppService } from './app.service';
 import { HelloController } from './hello/hello.controller';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { AuthModule } from './auth/auth.module';
+import { PostModule } from './post/post.module';
 
 @Module({
-  imports: [AuthModule],
+  imports: [AuthModule, PostModule],
   controllers: [AppController, HelloController],
   providers: [AppService],
 })
