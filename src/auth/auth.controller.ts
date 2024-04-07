@@ -20,8 +20,8 @@ export class AuthController {
 
     res.cookie('userId', user.id, {
       httpOnly: true,
-      // sameSite: 'none',
-      secure: false,
+      sameSite: 'none',
+      secure: true,
       // 有効期限: 24時間
       maxAge: 24 * 60 * 60 * 1000,
       path: '/',
