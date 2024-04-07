@@ -39,6 +39,7 @@ model User {
 model Post {
   id     Int     @id @default(autoincrement())
   text   String
+  createdAt DateTime @default(now())
   userId Int
   user   User    @relation(fields: [userId], references: [id])
 }

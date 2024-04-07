@@ -5,10 +5,10 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  console.log(process.env.CORS_ORIGIN);
+  const originRegExp = new RegExp(/.*/);
 
   app.enableCors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3001',
+    origin: originRegExp,
     credentials: true,
   });
   app.use(cookieParser());
