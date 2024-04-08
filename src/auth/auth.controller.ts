@@ -21,14 +21,14 @@ export class AuthController {
 
     session.userId = user.id;
 
-    res.cookie('userId', user.id, {
-      httpOnly: true,
-      sameSite: 'none',
-      secure: true,
-      // 有効期限: 24時間
-      maxAge: 24 * 60 * 60 * 1000,
-      path: '/',
-    });
+    // res.cookie('userId', user.id, {
+    //   httpOnly: true,
+    //   sameSite: 'none',
+    //   secure: true,
+    //   // 有効期限: 24時間
+    //   maxAge: 24 * 60 * 60 * 1000,
+    //   path: '/',
+    // });
 
     res.json({
       ...req.user,
