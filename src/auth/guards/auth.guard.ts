@@ -22,7 +22,8 @@ export class AuthGuard implements CanActivate {
   }
 
   private validateRequest(request): boolean {
-    console.log('cookie', request.cookies);
-    return !!request.cookies['userId']; // CookieにuserIdが存在するかチェック
+    console.log('request.session.userId', request.session.userId);
+    // sessionにuserIdが存在するかどうか
+    return request.session.userId ? true : false;
   }
 }

@@ -13,7 +13,7 @@ export class PostController {
   }
 
   // 投稿を作成
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Post('create')
   async createPost(@Body() body: CreatePostDto) {
     return await this.postService.createPost(body);
