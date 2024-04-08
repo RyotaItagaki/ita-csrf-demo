@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  UseGuards,
+  Session,
+} from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './Dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
@@ -15,7 +22,18 @@ export class PostController {
   // 投稿を作成
   // @UseGuards(AuthGuard)
   @Post('create')
-  async createPost(@Body() body: CreatePostDto) {
-    return await this.postService.createPost(body);
+  async createPost(
+    @Body() body: CreatePostDto,
+    @Session() session: Record<string, any>,
+  ) {
+    console.log('session.userId', session.userId);
+
+    const post = await this.postService.createPost({
+      userId: session.userId,
+      text: body.text,
+    });
+
+    return post;
+    // return await this.postService.createPost(body);
   }
 }
