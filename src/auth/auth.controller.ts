@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Post, Req, Res } from '@nestjs/common';
+import { Controller, UseGuards, Post, Req, Res, Session } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
 
@@ -11,12 +11,15 @@ export class AuthController {
     req: Request,
     @Res()
     res: Response,
+    @Session() session: Record<string, any>,
   ) {
     const user = req.user as {
       id: string;
       name: string;
       email: string;
     };
+
+    session.userId = user.id;
 
     res.cookie('userId', user.id, {
       httpOnly: true,
@@ -27,6 +30,8 @@ export class AuthController {
       path: '/',
     });
 
-    res.json(req.user);
+    res.json({
+      ...req.user,
+    });
   }
 }
